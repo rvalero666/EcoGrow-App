@@ -1,1 +1,3 @@
 # EcoGrow-App
+
+Aplicación android
