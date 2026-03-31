@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">EcoGrow</string>
+
+    <!-- Registro -->
+    <string name="register_title">Crear cuenta</string>
+    <string name="register_subtitle">Conecta con productores ecologicos cerca de ti</string>
+    <string name="section_personal_data">Datos personales</string>
+    <string name="section_security">Seguridad</string>
+    <string name="field_nombre">Nombre</string>
+    <string name="field_apellidos">Apellidos</string>
+    <string name="field_email">Correo electrónico</string>
+    <string name="field_password">Contraseña</string>
+    <string name="field_confirm_password">Confirmar contraseña</string>
+    <string name="field_telefono">Teléfono (opcional)</string>
+    <string name="role_consumidor">Consumidor</string>
+    <string name="role_productor">Productor</string>
+    <string name="select_role">Selecciona tu rol</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="link_already_have_account">¿Ya tienes una cuenta? Iniciar sesión</string>
+
+    <!-- Errores de validación -->
+    <string name="error_field_required">Este campo es obligatorio</string>
+    <string name="error_email_invalid">Correo electrónico no válido</string>
+    <string name="error_password_too_short">La contraseña debe tener al menos 8 caracteres</string>
+    <string name="error_password_weak">La contraseña debe contener letras y números</string>
+    <string name="error_passwords_dont_match">Las contraseñas no coinciden</string>
+    <string name="error_generic">Ha ocurrido un error. Inténtalo de nuevo.</string>
+    <string name="error_network">Error de conexión. Comprueba tu conexión a internet.</string>
+    <string name="error_email_exists">Este correo electrónico ya está registrado</string>
 </resources>
