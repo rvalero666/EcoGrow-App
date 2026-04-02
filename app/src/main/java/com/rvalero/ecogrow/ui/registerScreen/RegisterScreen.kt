@@ -70,14 +70,16 @@ fun RegisterViewModelScreen(
 
     RegisterScreen(
         state = uiState,
-        snackbarHostState = snackbarHostState
+        snackbarHostState = snackbarHostState,
+        onIntent = viewModel::handleIntent
     )
 }
 
 @Composable
 fun RegisterScreen(
     state: RegisterState,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onIntent: (RegisterIntent) -> Unit
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -150,21 +152,21 @@ fun RegisterScreen(
 
                     EcoGrowTextField(
                         value = state.nombre,
-                        onValueChange = {},
+                        onValueChange = { onIntent(RegisterIntent.NombreChanged(it)) },
                         label = stringResource(R.string.field_nombre),
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     EcoGrowTextField(
                         value = state.apellidos,
-                        onValueChange = {},
+                        onValueChange = { onIntent(RegisterIntent.ApellidosChanged(it)) },
                         label = stringResource(R.string.field_apellidos),
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     EcoGrowTextField(
                         value = state.email,
-                        onValueChange = {},
+                        onValueChange = { onIntent(RegisterIntent.EmailChanged(it)) },
                         label = stringResource(R.string.field_email),
                         keyboardType = KeyboardType.Email,
                         modifier = Modifier.fillMaxWidth()
@@ -172,7 +174,7 @@ fun RegisterScreen(
 
                     EcoGrowTextField(
                         value = state.telefono,
-                        onValueChange = {},
+                        onValueChange = { onIntent(RegisterIntent.TelefonoChanged(it)) },
                         label = stringResource(R.string.field_telefono),
                         keyboardType = KeyboardType.Phone,
                         modifier = Modifier.fillMaxWidth()
@@ -180,22 +182,22 @@ fun RegisterScreen(
 
                     EcoGrowTextField(
                         value = state.password,
-                        onValueChange = {},
+                        onValueChange = { onIntent(RegisterIntent.PasswordChanged(it)) },
                         label = stringResource(R.string.field_password),
                         isPassword = true,
                         isPasswordVisible = state.isPasswordVisible,
-                        onTogglePasswordVisibility = {},
+                        onTogglePasswordVisibility = { onIntent(RegisterIntent.TogglePasswordVisibility) },
                         keyboardType = KeyboardType.Password,
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     EcoGrowTextField(
                         value = state.confirmPassword,
-                        onValueChange = {},
+                        onValueChange = { onIntent(RegisterIntent.ConfirmPasswordChanged(it)) },
                         label = stringResource(R.string.field_confirm_password),
                         isPassword = true,
                         isPasswordVisible = state.isConfirmPasswordVisible,
-                        onTogglePasswordVisibility = {},
+                        onTogglePasswordVisibility = { onIntent(RegisterIntent.ToggleConfirmPasswordVisibility) },
                         keyboardType = KeyboardType.Password,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -204,7 +206,7 @@ fun RegisterScreen(
 
             EcoGrowButton(
                 text = stringResource(R.string.btn_register),
-                onClick = {},
+                onClick = { onIntent(RegisterIntent.Submit) },
                 isLoading = state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -234,7 +236,8 @@ fun RegisterScreen(
 private fun RegisterScreenPreview() {
     EcoGrowTheme {
         RegisterScreen(
-            state = RegisterState()
+            state = RegisterState(),
+            onIntent = {}
         )
     }
 }

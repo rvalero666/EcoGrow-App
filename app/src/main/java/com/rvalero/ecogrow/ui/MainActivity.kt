@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.EcoGrowTheme
 import com.rvalero.ecogrow.ui.registerScreen.RegisterViewModel
 import com.rvalero.ecogrow.ui.registerScreen.RegisterViewModelScreen
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             EcoGrowTheme {
-                val registerViewModel: RegisterViewModel = viewModel()
+                val registerViewModel: RegisterViewModel = koinViewModel()
                 RegisterViewModelScreen(
                     viewModel = registerViewModel,
                     onNavigateToLogin = { }
