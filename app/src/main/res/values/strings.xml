@@ -18,6 +18,12 @@
     <string name="btn_register">Registrarse</string>
     <string name="link_already_have_account">¿Ya tienes una cuenta? Iniciar sesión</string>
 
+    <!-- Activación -->
+    <string name="activation_title">Activa tu cuenta</string>
+    <string name="activation_message_prefix">Se ha enviado un correo a</string>
+    <string name="activation_message_suffix">, revíselo para activar su cuenta.</string>
+    <string name="btn_go_to_login">Ir al inicio de sesión</string>
+
     <!-- Errores de validación -->
     <string name="error_field_required">Este campo es obligatorio</string>
     <string name="error_email_invalid">Correo electrónico no válido</string>

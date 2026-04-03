@@ -2,9 +2,10 @@ package com.rvalero.ecogrow.ui.registerScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rvalero.ecogrow.data.remote.utils.NetworkResult
+import com.rvalero.ecogrow.common.NetworkResult
 import com.rvalero.ecogrow.domain.model.Usuario
 import com.rvalero.ecogrow.domain.useCase.RegisterUseCase
+import com.rvalero.ecogrow.ui.navigation.Routes
 import com.rvalero.ecogrow.ui.util.UiEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,7 +59,9 @@ class RegisterViewModel(
             val result = registerUseCase(usuario)
             _uiState.update { it.copy(isLoading = false) }
             when (result) {
-                is NetworkResult.Success -> sendEvent(UiEvent.ShowSnackbar(result.data))
+                is NetworkResult.Success -> {
+                    sendEvent(UiEvent.NavigateTo(Routes.ActivationRoute(email = state.email)))
+                }
                 is NetworkResult.Error -> sendEvent(UiEvent.ShowSnackbar(result.message ?: "Error inesperado"))
             }
         }

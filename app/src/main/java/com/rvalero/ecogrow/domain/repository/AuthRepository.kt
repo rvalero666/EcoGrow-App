@@ -1,6 +1,6 @@
 package com.rvalero.ecogrow.domain.repository
 
-import com.rvalero.ecogrow.data.remote.utils.NetworkResult
+import com.rvalero.ecogrow.common.NetworkResult
 import com.rvalero.ecogrow.domain.model.Usuario
 
 interface AuthRepository {
