@@ -38,4 +38,11 @@
     <string name="error_generic">Ha ocurrido un error. Inténtalo de nuevo.</string>
     <string name="error_network">Error de conexión. Comprueba tu conexión a internet.</string>
     <string name="error_email_exists">Este correo electrónico ya está registrado</string>
+
+    <!-- Bottom navigation tabs -->
+    <string name="tab_home">Inicio</string>
+    <string name="tab_explore">Explorar</string>
+    <string name="tab_orders">Cesta</string>
+    <string name="tab_profile">Perfil</string>
+    <string name="tab_share">Publicar</string>
 </resources>

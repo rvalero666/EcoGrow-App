@@ -8,8 +8,8 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.rvalero.ecogrow.ui.activationScreen.ActivationViewModelScreen
-import com.rvalero.ecogrow.ui.homeScreen.HomeScreenViewModel
 import com.rvalero.ecogrow.ui.loginScreen.LoginViewModelScreen
+import com.rvalero.ecogrow.ui.main.MainScreen
 import com.rvalero.ecogrow.ui.registerScreen.RegisterViewModelScreen
 @Composable
 fun EcoGrowNavHost() {
@@ -34,6 +34,7 @@ fun EcoGrowNavHost() {
                         navigateTo(Routes.RegisterRoute)
                     },
                     onNavigateToHome = {
+                        backStack.removeAll { it !is Routes.HomeRoute }
                         navigateTo(Routes.HomeRoute)
                     }
                 )
@@ -58,9 +59,7 @@ fun EcoGrowNavHost() {
             }
 
             entry<Routes.HomeRoute> {
-                HomeScreenViewModel(
-
-                )
+                MainScreen()
             }
         }
     )
