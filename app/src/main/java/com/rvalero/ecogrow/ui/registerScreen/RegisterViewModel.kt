@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.rvalero.ecogrow.common.NetworkResult
 import com.rvalero.ecogrow.domain.model.Usuario
 import com.rvalero.ecogrow.domain.useCase.RegisterUseCase
-import com.rvalero.ecogrow.ui.navigation.Routes
+import com.rvalero.ecogrow.ui.util.navigation.Routes
 import com.rvalero.ecogrow.ui.util.UiEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +40,7 @@ class RegisterViewModel(
             is RegisterIntent.TogglePasswordVisibility -> _uiState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
             is RegisterIntent.ToggleConfirmPasswordVisibility -> _uiState.update { it.copy(isConfirmPasswordVisible = !it.isConfirmPasswordVisible) }
             is RegisterIntent.Submit -> register()
+            is RegisterIntent.NavigateToLogin -> sendEvent(UiEvent.NavigateTo(Routes.LoginRoute))
         }
     }
 

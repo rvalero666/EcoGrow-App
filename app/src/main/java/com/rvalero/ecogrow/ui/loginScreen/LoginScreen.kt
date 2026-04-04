@@ -1,4 +1,4 @@
-package com.rvalero.ecogrow.ui.registerScreen
+package com.rvalero.ecogrow.ui.loginScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,9 +30,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,20 +38,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.compose.EcoGrowTheme
 import com.rvalero.ecogrow.R
 import com.rvalero.ecogrow.ui.components.EcoGrowButton
 import com.rvalero.ecogrow.ui.components.EcoGrowTextField
-import com.rvalero.ecogrow.ui.loginScreen.LoginIntent
 import com.rvalero.ecogrow.ui.util.navigation.Routes
 import com.rvalero.ecogrow.ui.util.UiEvent
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun RegisterViewModelScreen(
-    viewModel: RegisterViewModel = koinViewModel(),
-    onNavigateToLogin: () -> Unit = {},
-    onNavigateToActivation: (email: String) -> Unit = {}
+fun LoginViewModelScreen(
+    viewModel: LoginViewModel = koinViewModel(),
+    onNavigateToRegister: () -> Unit = {},
+    onNavigateToHome: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -65,21 +64,22 @@ fun RegisterViewModelScreen(
             viewModel.uiEvent.collect { event ->
                 when (event) {
                     is UiEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.message)
-                    is UiEvent.NavigateBack -> onNavigateToLogin()
                     is UiEvent.NavigateTo -> {
-                        val route = event.route
-                        if (route is Routes.ActivationRoute) {
-                            onNavigateToActivation(route.email)
-                        } else if (route is Routes.LoginRoute){
-                            onNavigateToLogin()
+                        if (event.route is Routes.RegisterRoute) {
+                            onNavigateToRegister()
+                        }
+
+                        if(event.route is Routes.HomeRoute){
+                            onNavigateToHome()
                         }
                     }
+                    is UiEvent.NavigateBack -> {}
                 }
             }
         }
     }
 
-    RegisterScreen(
+    LoginScreen(
         state = uiState,
         snackbarHostState = snackbarHostState,
         onIntent = viewModel::handleIntent
@@ -87,10 +87,10 @@ fun RegisterViewModelScreen(
 }
 
 @Composable
-fun RegisterScreen(
-    state: RegisterState,
+fun LoginScreen(
+    state: LoginState,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    onIntent: (RegisterIntent) -> Unit
+    onIntent: (LoginIntent) -> Unit
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -153,7 +153,7 @@ fun RegisterScreen(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
-                        text = stringResource(R.string.register_title),
+                        text = stringResource(R.string.login_title),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -162,53 +162,20 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     EcoGrowTextField(
-                        value = state.nombre,
-                        onValueChange = { onIntent(RegisterIntent.NombreChanged(it)) },
-                        label = stringResource(R.string.field_nombre),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    EcoGrowTextField(
-                        value = state.apellidos,
-                        onValueChange = { onIntent(RegisterIntent.ApellidosChanged(it)) },
-                        label = stringResource(R.string.field_apellidos),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    EcoGrowTextField(
                         value = state.email,
-                        onValueChange = { onIntent(RegisterIntent.EmailChanged(it)) },
+                        onValueChange = { onIntent(LoginIntent.EmailChanged(it)) },
                         label = stringResource(R.string.field_email),
                         keyboardType = KeyboardType.Email,
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     EcoGrowTextField(
-                        value = state.telefono,
-                        onValueChange = { onIntent(RegisterIntent.TelefonoChanged(it)) },
-                        label = stringResource(R.string.field_telefono),
-                        keyboardType = KeyboardType.Phone,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    EcoGrowTextField(
                         value = state.password,
-                        onValueChange = { onIntent(RegisterIntent.PasswordChanged(it)) },
+                        onValueChange = { onIntent(LoginIntent.PasswordChanged(it)) },
                         label = stringResource(R.string.field_password),
                         isPassword = true,
                         isPasswordVisible = state.isPasswordVisible,
-                        onTogglePasswordVisibility = { onIntent(RegisterIntent.TogglePasswordVisibility) },
-                        keyboardType = KeyboardType.Password,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    EcoGrowTextField(
-                        value = state.confirmPassword,
-                        onValueChange = { onIntent(RegisterIntent.ConfirmPasswordChanged(it)) },
-                        label = stringResource(R.string.field_confirm_password),
-                        isPassword = true,
-                        isPasswordVisible = state.isConfirmPasswordVisible,
-                        onTogglePasswordVisibility = { onIntent(RegisterIntent.ToggleConfirmPasswordVisibility) },
+                        onTogglePasswordVisibility = { onIntent(LoginIntent.TogglePasswordVisibility) },
                         keyboardType = KeyboardType.Password,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -216,8 +183,8 @@ fun RegisterScreen(
             }
 
             EcoGrowButton(
-                text = stringResource(R.string.btn_register),
-                onClick = { onIntent(RegisterIntent.Submit) },
+                text = stringResource(R.string.btn_login),
+                onClick = { onIntent(LoginIntent.Submit) },
                 isLoading = state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -226,11 +193,11 @@ fun RegisterScreen(
             )
 
             TextButton(
-                onClick = {onIntent(RegisterIntent.NavigateToLogin)},
+                onClick = { onIntent(LoginIntent.NavigateToRegister) },
                 modifier = Modifier.offset(y = (-4).dp)
             ) {
                 Text(
-                    text = stringResource(R.string.link_already_have_account),
+                    text = stringResource(R.string.link_no_account),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -241,13 +208,12 @@ fun RegisterScreen(
     }
 }
 
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun RegisterScreenPreview() {
+private fun LoginScreenPreview() {
     EcoGrowTheme {
-        RegisterScreen(
-            state = RegisterState(),
+        LoginScreen(
+            state = LoginState(),
             onIntent = {}
         )
     }

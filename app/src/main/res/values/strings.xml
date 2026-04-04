@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">EcoGrow</string>
 
+    <!-- Login -->
+    <string name="login_title">Iniciar sesión</string>
+    <string name="btn_login">Iniciar sesión</string>
+    <string name="link_no_account">¿No tienes cuenta? Regístrate</string>
+
     <!-- Registro -->
     <string name="register_title">Crear cuenta</string>
     <string name="register_subtitle">Conecta con productores ecologicos cerca de ti</string>

@@ -1,6 +1,6 @@
 package com.rvalero.ecogrow.ui.util
 
-import com.rvalero.ecogrow.ui.navigation.Routes
+import com.rvalero.ecogrow.ui.util.navigation.Routes
 
  sealed interface UiEvent {
     data class ShowSnackbar(val message: String) : UiEvent

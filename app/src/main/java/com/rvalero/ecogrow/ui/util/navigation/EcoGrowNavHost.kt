@@ -1,4 +1,4 @@
-package com.rvalero.ecogrow.ui.navigation
+package com.rvalero.ecogrow.ui.util.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.dropUnlessResumed
@@ -8,10 +8,12 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.rvalero.ecogrow.ui.activationScreen.ActivationViewModelScreen
+import com.rvalero.ecogrow.ui.homeScreen.HomeScreenViewModel
+import com.rvalero.ecogrow.ui.loginScreen.LoginViewModelScreen
 import com.rvalero.ecogrow.ui.registerScreen.RegisterViewModelScreen
 @Composable
 fun EcoGrowNavHost() {
-    val backStack = rememberNavBackStack(Routes.RegisterRoute)
+    val backStack = rememberNavBackStack(Routes.LoginRoute)
 
     fun navigateTo(route: Routes) { backStack.add(route) }
 
@@ -26,9 +28,20 @@ fun EcoGrowNavHost() {
         ),
 
         entryProvider = entryProvider {
+            entry<Routes.LoginRoute> {
+                LoginViewModelScreen(
+                    onNavigateToRegister = {
+                        navigateTo(Routes.RegisterRoute)
+                    },
+                    onNavigateToHome = {
+                        navigateTo(Routes.HomeRoute)
+                    }
+                )
+            }
+
             entry<Routes.RegisterRoute> {
                 RegisterViewModelScreen(
-                    onNavigateToLogin = dropUnlessResumed { },
+                    onNavigateToLogin = dropUnlessResumed { pop() },
                     onNavigateToActivation = { email ->
                         navigateTo(Routes.ActivationRoute(email))
                     }
@@ -39,8 +52,14 @@ fun EcoGrowNavHost() {
                 ActivationViewModelScreen(
                     email = route.email,
                     onNavigateToLogin = dropUnlessResumed {
-
+                        backStack.removeAll { it !is Routes.LoginRoute }
                     }
+                )
+            }
+
+            entry<Routes.HomeRoute> {
+                HomeScreenViewModel(
+
                 )
             }
         }

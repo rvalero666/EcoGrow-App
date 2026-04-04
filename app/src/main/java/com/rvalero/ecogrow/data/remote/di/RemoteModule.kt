@@ -6,6 +6,7 @@ import com.rvalero.ecogrow.data.remote.utils.TokenManager
 import com.rvalero.ecogrow.data.remote.utils.provideHttpClient
 import com.rvalero.ecogrow.data.repositoryImp.AuthRepositoryImpl
 import com.rvalero.ecogrow.domain.repository.AuthRepository
+import com.rvalero.ecogrow.domain.useCase.LoginUseCase
 import com.rvalero.ecogrow.domain.useCase.RegisterUseCase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -18,10 +19,11 @@ val remoteModule = module {
 
 
 val repositoryModule = module {
-    single<AuthRepository> { AuthRepositoryImpl(get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
 }
 
 
 val useCaseModule = module {
     single { RegisterUseCase(get()) }
+    single { LoginUseCase(get()) }
 }

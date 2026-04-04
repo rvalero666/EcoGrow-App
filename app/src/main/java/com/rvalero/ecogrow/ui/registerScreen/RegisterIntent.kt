@@ -10,4 +10,5 @@ sealed interface RegisterIntent {
     data object TogglePasswordVisibility : RegisterIntent
     data object ToggleConfirmPasswordVisibility : RegisterIntent
     data object Submit : RegisterIntent
+    data object NavigateToLogin : RegisterIntent
 }

@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.compose.EcoGrowTheme
-import com.rvalero.ecogrow.ui.navigation.EcoGrowNavHost
+import com.rvalero.ecogrow.ui.util.navigation.EcoGrowNavHost
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

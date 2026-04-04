@@ -1,10 +1,13 @@
-package com.rvalero.ecogrow.ui.navigation
+package com.rvalero.ecogrow.ui.util.navigation
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 
-sealed class Routes : NavKey{
+sealed class Routes : NavKey {
+
+    @Serializable
+    data object LoginRoute : Routes()
 
     @Serializable
     data object RegisterRoute : Routes()
@@ -12,5 +15,7 @@ sealed class Routes : NavKey{
     @Serializable
     data class ActivationRoute(val email: String) : Routes()
 
+    @Serializable
+    data object HomeRoute : Routes()
 }
 

@@ -1,5 +1,8 @@
 package com.rvalero.ecogrow.data.remote.utils
 
+import com.rvalero.ecogrow.BuildConfig
+import com.rvalero.ecogrow.common.CrashlyticsLogger
+import com.rvalero.ecogrow.data.model.ApiResponseDto
 import com.rvalero.ecogrow.data.model.auth.AuthResponseDto
 import com.rvalero.ecogrow.data.model.auth.RefreshTokenRequestDto
 import io.ktor.client.HttpClient
@@ -34,7 +37,7 @@ fun provideHttpClient(tokenManager: TokenManager): HttpClient {
         }
 
         install(Logging) {
-            level = LogLevel.BODY
+            level = if (BuildConfig.DEBUG) LogLevel.BODY else LogLevel.NONE
         }
 
         install(Auth) {
@@ -50,14 +53,25 @@ fun provideHttpClient(tokenManager: TokenManager): HttpClient {
                 }
 
                 refreshTokens {
-                    val currentRefresh = tokenManager.getRefreshToken().firstOrNull() ?: return@refreshTokens null
-                    val response: AuthResponseDto = client.post("$BASE_URL/auth/refresh") {
-                        contentType(ContentType.Application.Json)
-                        setBody(RefreshTokenRequestDto(refreshToken = currentRefresh))
-                        markAsRefreshTokenRequest()
-                    }.body()
-                    tokenManager.saveTokens(response.accessToken, response.refreshToken)
-                    BearerTokens(response.accessToken, response.refreshToken)
+                    try {
+                        val currentRefresh = tokenManager.getRefreshToken().firstOrNull()
+                            ?: return@refreshTokens null
+                        val response: ApiResponseDto<AuthResponseDto> = client.post("$BASE_URL/auth/refresh") {
+                            contentType(ContentType.Application.Json)
+                            setBody(RefreshTokenRequestDto(refreshToken = currentRefresh))
+                            markAsRefreshTokenRequest()
+                        }.body()
+                        if (!response.success || response.data == null) {
+                            tokenManager.clearTokens()
+                            return@refreshTokens null
+                        }
+                        tokenManager.saveTokens(response.data.accessToken, response.data.refreshToken)
+                        BearerTokens(response.data.accessToken, response.data.refreshToken)
+                    } catch (e: Exception) {
+                        CrashlyticsLogger.logException(e)
+                        tokenManager.clearTokens()
+                        null
+                    }
                 }
 
                 sendWithoutRequest { request ->
