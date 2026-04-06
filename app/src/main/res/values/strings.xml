@@ -39,6 +39,22 @@
     <string name="error_network">Error de conexión. Comprueba tu conexión a internet.</string>
     <string name="error_email_exists">Este correo electrónico ya está registrado</string>
 
+    <!-- Home -->
+    <string name="home_greeting">Hola, %1$s</string>
+    <string name="home_question">¿Qué buscas hoy?</string>
+    <string name="home_search_hint">Buscar productos, productores…</string>
+    <string name="home_season_label">TEMPORADA</string>
+    <string name="home_season_title">Productos de primavera\nrecién cosechados</string>
+    <string name="home_season_button">Ver colección</string>
+    <string name="home_nearby_producers">Productores cercanos</string>
+    <string name="home_featured_products">Productos destacados</string>
+    <string name="home_see_all">Ver todos</string>
+    <string name="category_all">Todos</string>
+    <string name="category_vegetables">Verduras</string>
+    <string name="category_fruits">Frutas</string>
+    <string name="category_crafts">Artesanía</string>
+    <string name="category_honey">Miel</string>
+
     <!-- Bottom navigation tabs -->
     <string name="tab_home">Inicio</string>
     <string name="tab_explore">Explorar</string>
