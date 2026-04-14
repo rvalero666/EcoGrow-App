@@ -71,8 +71,8 @@ fun HomeScreen(
         GreetingHeader(userName = "Ramón")
 
         EcoGrowSearchBar(
-            value = state.searchQuery,
-            onValueChange = { onIntent(HomeIntent.SearchQueryChanged(it)) },
+            value = "",
+            onValueChange = { },
             hint = stringResource(R.string.home_search_hint),
             modifier = Modifier
                 .padding(horizontal = 20.dp)
