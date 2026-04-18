@@ -3,8 +3,10 @@ package com.rvalero.ecogrow.ui.homeScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rvalero.ecogrow.common.NetworkResult
+import com.rvalero.ecogrow.domain.useCase.auth.GetUserNameUseCase
 import com.rvalero.ecogrow.domain.useCase.product.GetFeaturedProductsUseCase
 import com.rvalero.ecogrow.domain.useCase.producer.GetNearbyProducersUseCase
+import kotlinx.coroutines.flow.firstOrNull
 import com.rvalero.ecogrow.ui.util.UiEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +19,8 @@ import java.math.BigDecimal
 
 class HomeViewModel(
     private val getNearbyProducersUseCase: GetNearbyProducersUseCase,
-    private val getFeaturedProductsUseCase: GetFeaturedProductsUseCase
+    private val getFeaturedProductsUseCase: GetFeaturedProductsUseCase,
+    private val getUserNameUseCase: GetUserNameUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeState())
@@ -44,6 +47,11 @@ class HomeViewModel(
         _uiState.update { it.copy(isLoading = true, error = null) }
 
         viewModelScope.launch {
+            launch {
+                val nombre = getUserNameUseCase().firstOrNull() ?: ""
+                _uiState.update { it.copy(userName = nombre) }
+            }
+
             launch {
                 val result = getNearbyProducersUseCase(
                     latitud = BigDecimal("39.4699"),

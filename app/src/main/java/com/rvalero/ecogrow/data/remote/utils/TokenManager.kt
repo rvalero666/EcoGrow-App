@@ -15,6 +15,7 @@ class TokenManager(private val context: Context) {
 
     private val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token")
     private val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token")
+    private val USER_NAME_KEY = stringPreferencesKey("user_name")
 
 
     fun getAccessToken(): Flow<String?> = context.dataStore.data.map { prefs ->
@@ -25,10 +26,15 @@ class TokenManager(private val context: Context) {
         prefs[REFRESH_TOKEN_KEY]
     }
 
-    suspend fun saveTokens(accessToken: String, refreshToken: String) {
+    fun getUserName(): Flow<String?> = context.dataStore.data.map { prefs ->
+        prefs[USER_NAME_KEY]
+    }
+
+    suspend fun saveTokens(accessToken: String, refreshToken: String, nombre: String) {
         context.dataStore.edit { prefs ->
             prefs[ACCESS_TOKEN_KEY] = accessToken
             prefs[REFRESH_TOKEN_KEY] = refreshToken
+            prefs[USER_NAME_KEY] = nombre
         }
     }
 
@@ -36,6 +42,7 @@ class TokenManager(private val context: Context) {
         context.dataStore.edit { prefs ->
             prefs.remove(ACCESS_TOKEN_KEY)
             prefs.remove(REFRESH_TOKEN_KEY)
+            prefs.remove(USER_NAME_KEY)
         }
     }
 }

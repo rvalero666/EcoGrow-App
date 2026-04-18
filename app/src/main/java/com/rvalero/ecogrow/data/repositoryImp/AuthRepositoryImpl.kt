@@ -8,11 +8,14 @@ import com.rvalero.ecogrow.common.NetworkResult
 import com.rvalero.ecogrow.common.safeApiCall
 import com.rvalero.ecogrow.domain.model.Usuario
 import com.rvalero.ecogrow.domain.repository.AuthRepository
+import kotlinx.coroutines.flow.Flow
 
 class AuthRepositoryImpl(
     private val apiService: AuthApiService,
     private val tokenManager: TokenManager
 ) : AuthRepository {
+
+    override fun getUserName(): Flow<String?> = tokenManager.getUserName()
 
     override suspend fun register(registerRequest: Usuario): NetworkResult<String> {
         return safeApiCall {
@@ -26,7 +29,7 @@ class AuthRepositoryImpl(
         return safeApiCall {
             val response = apiService.login(LoginRequestDto(email, password))
             if (!response.success || response.data == null) throw Exception(response.message)
-            tokenManager.saveTokens(response.data.accessToken, response.data.refreshToken)
+            tokenManager.saveTokens(response.data.accessToken, response.data.refreshToken, response.data.nombre)
         }
     }
 }
