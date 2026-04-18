@@ -15,6 +15,7 @@ import com.rvalero.ecogrow.domain.repository.AuthRepository
 import com.rvalero.ecogrow.domain.repository.ProducerRepository
 import com.rvalero.ecogrow.domain.repository.ProductRepository
 import com.rvalero.ecogrow.domain.useCase.product.GetFeaturedProductsUseCase
+import com.rvalero.ecogrow.domain.useCase.product.GetProductDetailUseCase
 import com.rvalero.ecogrow.domain.useCase.product.SearchProductsUseCase
 import com.rvalero.ecogrow.domain.useCase.producer.GetNearbyProducersUseCase
 import com.rvalero.ecogrow.domain.useCase.auth.GetUserNameUseCase
@@ -46,4 +47,5 @@ val useCaseModule = module {
     single { GetNearbyProducersUseCase(get()) }
     single { GetFeaturedProductsUseCase(get()) }
     single { SearchProductsUseCase(get()) }
+    single { GetProductDetailUseCase(get()) }
 }

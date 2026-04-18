@@ -5,6 +5,12 @@ import androidx.compose.ui.Modifier
 import com.rvalero.ecogrow.ui.homeScreen.HomeScreenViewModel
 
 @Composable
-fun HomeTabContent(modifier: Modifier = Modifier) {
-    HomeScreenViewModel(modifier = modifier)
+fun HomeTabContent(
+    onNavigateToProductDetail: (Long) -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    HomeScreenViewModel(
+        onNavigateToProductDetail = onNavigateToProductDetail,
+        modifier = modifier
+    )
 }

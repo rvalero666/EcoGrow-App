@@ -23,7 +23,9 @@ import com.rvalero.ecogrow.ui.main.tabs.ProfileTabContent
 import com.rvalero.ecogrow.ui.main.tabs.ShareTabContent
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    onNavigateToProductDetail: (Long) -> Unit = {}
+) {
     var selectedTab by rememberSaveable { mutableStateOf(BottomTab.HOME) }
     val snackbarHostState = remember { SnackbarHostState() }
     val title = stringResource(selectedTab.labelResId)
@@ -45,7 +47,10 @@ fun MainScreen() {
     ) { paddingValues ->
         CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
             when (selectedTab) {
-                BottomTab.HOME -> HomeTabContent(Modifier.padding(paddingValues))
+                BottomTab.HOME -> HomeTabContent(
+                    onNavigateToProductDetail = onNavigateToProductDetail,
+                    modifier = Modifier.padding(paddingValues)
+                )
                 BottomTab.EXPLORE -> ExploreTabContent(Modifier.padding(paddingValues))
                 BottomTab.SHARE -> ShareTabContent(Modifier.padding(paddingValues))
                 BottomTab.ORDERS -> OrdersTabContent(Modifier.padding(paddingValues))

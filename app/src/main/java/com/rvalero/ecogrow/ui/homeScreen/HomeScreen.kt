@@ -48,6 +48,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreenViewModel(
+    onNavigateToProductDetail: (Long) -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel()
 ) {
@@ -70,6 +71,7 @@ fun HomeScreenViewModel(
     HomeScreen(
         state = uiState,
         onIntent = viewModel::handleIntent,
+        onProductClick = onNavigateToProductDetail,
         modifier = modifier
     )
 }
@@ -78,6 +80,7 @@ fun HomeScreenViewModel(
 fun HomeScreen(
     state: HomeState,
     onIntent: (HomeIntent) -> Unit,
+    onProductClick: (Long) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -99,10 +102,11 @@ fun HomeScreen(
         if (state.searchQuery.isNotBlank()) {
             SearchResultsContent(
                 searchResults = state.searchResults,
-                isSearching = state.isSearching
+                isSearching = state.isSearching,
+                onProductClick = onProductClick
             )
         } else {
-            HomeDefaultContent(state = state)
+            HomeDefaultContent(state = state, onProductClick = onProductClick)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -111,7 +115,7 @@ fun HomeScreen(
 
 
 @Composable
-private fun HomeDefaultContent(state: HomeState) {
+private fun HomeDefaultContent(state: HomeState, onProductClick: (Long) -> Unit = {}) {
     CategoryChips()
 
     SeasonBanner()
@@ -155,14 +159,15 @@ private fun HomeDefaultContent(state: HomeState) {
             CircularProgressIndicator()
         }
     } else {
-        ProductCardsRow(products = state.products)
+        ProductCardsRow(products = state.products, onProductClick = onProductClick)
     }
 }
 
 @Composable
 private fun SearchResultsContent(
     searchResults: List<Product>,
-    isSearching: Boolean
+    isSearching: Boolean,
+    onProductClick: (Long) -> Unit = {}
 ) {
     if (isSearching) {
         Box(
@@ -198,6 +203,7 @@ private fun SearchResultsContent(
                     producerName = product.productor,
                     price = String.format("%.2f €/%s", product.precio, product.unidad),
                     badge = null,
+                    onClick = { onProductClick(product.id) },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -329,7 +335,7 @@ private fun ProducerCardsRow(producers: List<Producer>) {
 }
 
 @Composable
-private fun ProductCardsRow(products: List<Product>) {
+private fun ProductCardsRow(products: List<Product>, onProductClick: (Long) -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -343,7 +349,8 @@ private fun ProductCardsRow(products: List<Product>) {
                 name = product.nombre,
                 producerName = product.productor,
                 price = String.format("%.2f €/%s", product.precio, product.unidad),
-                badge = null
+                badge = null,
+                onClick = { onProductClick(product.id) }
             )
         }
     }
@@ -366,7 +373,8 @@ private fun HomeScreenPreview() {
                     Product(2, "Miel de azahar", "Miel del Sur", 8.00, "500g")
                 )
             ),
-            onIntent = {}
+            onIntent = {},
+            onProductClick = {}
         )
     }
 }

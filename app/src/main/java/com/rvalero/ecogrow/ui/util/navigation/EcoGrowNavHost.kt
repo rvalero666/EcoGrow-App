@@ -10,6 +10,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.rvalero.ecogrow.ui.activationScreen.ActivationViewModelScreen
 import com.rvalero.ecogrow.ui.loginScreen.LoginViewModelScreen
 import com.rvalero.ecogrow.ui.main.MainScreen
+import com.rvalero.ecogrow.ui.productDetailScreen.ProductDetailViewModelScreen
 import com.rvalero.ecogrow.ui.registerScreen.RegisterViewModelScreen
 @Composable
 fun EcoGrowNavHost() {
@@ -59,7 +60,18 @@ fun EcoGrowNavHost() {
             }
 
             entry<Routes.HomeRoute> {
-                MainScreen()
+                MainScreen(
+                    onNavigateToProductDetail = { productId ->
+                        navigateTo(Routes.ProductDetailRoute(productId))
+                    }
+                )
+            }
+
+            entry<Routes.ProductDetailRoute> { route ->
+                ProductDetailViewModelScreen(
+                    productId = route.productId,
+                    onNavigateBack = dropUnlessResumed { pop() }
+                )
             }
         }
     )

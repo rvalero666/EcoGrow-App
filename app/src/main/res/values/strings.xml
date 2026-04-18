@@ -56,6 +56,22 @@
     <string name="category_crafts">Artesanía</string>
     <string name="category_honey">Miel</string>
 
+    <!-- Product Detail -->
+    <string name="product_detail_back">Volver</string>
+    <string name="product_detail_share">Compartir</string>
+    <string name="product_detail_favorite">Favorito</string>
+    <string name="product_detail_price_label">PRECIO</string>
+    <string name="product_detail_season">Temporada</string>
+    <string name="product_detail_available">disponibles</string>
+    <string name="product_detail_view_profile">Ver perfil</string>
+    <string name="product_detail_meta_origin">Origen</string>
+    <string name="product_detail_meta_unit">Unidad</string>
+    <string name="product_detail_meta_category">Categoría</string>
+    <string name="product_detail_verified">Verificado</string>
+    <string name="product_detail_decrease">Disminuir cantidad</string>
+    <string name="product_detail_increase">Aumentar cantidad</string>
+    <string name="product_detail_add_to_cart">Añadir</string>
+
     <!-- Bottom navigation tabs -->
     <string name="tab_home">Inicio</string>
     <string name="tab_explore">Explorar</string>

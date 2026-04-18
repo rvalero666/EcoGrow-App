@@ -17,5 +17,8 @@ sealed class Routes : NavKey {
 
     @Serializable
     data object HomeRoute : Routes()
+
+    @Serializable
+    data class ProductDetailRoute(val productId: Long) : Routes()
 }
 
