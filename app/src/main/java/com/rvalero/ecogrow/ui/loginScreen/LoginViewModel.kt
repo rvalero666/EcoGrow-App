@@ -3,7 +3,7 @@ package com.rvalero.ecogrow.ui.loginScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rvalero.ecogrow.common.NetworkResult
-import com.rvalero.ecogrow.domain.useCase.LoginUseCase
+import com.rvalero.ecogrow.domain.useCase.auth.LoginUseCase
 import com.rvalero.ecogrow.ui.util.navigation.Routes
 import com.rvalero.ecogrow.ui.util.UiEvent
 import kotlinx.coroutines.channels.Channel

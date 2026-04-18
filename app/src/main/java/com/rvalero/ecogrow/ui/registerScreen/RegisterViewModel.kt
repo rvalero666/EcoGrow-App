@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rvalero.ecogrow.common.NetworkResult
 import com.rvalero.ecogrow.domain.model.Usuario
-import com.rvalero.ecogrow.domain.useCase.RegisterUseCase
+import com.rvalero.ecogrow.domain.useCase.auth.RegisterUseCase
 import com.rvalero.ecogrow.ui.util.navigation.Routes
 import com.rvalero.ecogrow.ui.util.UiEvent
 import kotlinx.coroutines.channels.Channel

@@ -1,0 +1,9 @@
+package com.rvalero.ecogrow.data.remote.apiService.product
+
+import com.rvalero.ecogrow.data.model.ApiResponseDto
+import com.rvalero.ecogrow.data.model.product.ProductFeaturedResponseDto
+
+interface ProductApiService {
+
+    suspend fun getProductFeatured(): ApiResponseDto<List<ProductFeaturedResponseDto>>
+}

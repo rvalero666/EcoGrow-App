@@ -2,7 +2,7 @@ package com.rvalero.ecogrow.data.repositoryImp
 
 import com.rvalero.ecogrow.data.model.auth.LoginRequestDto
 import com.rvalero.ecogrow.data.model.auth.toDto
-import com.rvalero.ecogrow.data.remote.apiService.AuthApiService
+import com.rvalero.ecogrow.data.remote.apiService.auth.AuthApiService
 import com.rvalero.ecogrow.data.remote.utils.TokenManager
 import com.rvalero.ecogrow.common.NetworkResult
 import com.rvalero.ecogrow.common.safeApiCall

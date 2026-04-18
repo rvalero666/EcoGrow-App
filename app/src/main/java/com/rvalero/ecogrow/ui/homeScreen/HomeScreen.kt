@@ -14,15 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -30,13 +33,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.compose.EcoGrowTheme
 import com.rvalero.ecogrow.R
+import com.rvalero.ecogrow.domain.model.Producer
+import com.rvalero.ecogrow.domain.model.Product
 import com.rvalero.ecogrow.ui.components.EcoGrowProducerCard
 import com.rvalero.ecogrow.ui.components.EcoGrowProductCard
 import com.rvalero.ecogrow.ui.components.EcoGrowSearchBar
 import com.rvalero.ecogrow.ui.components.EcoGrowSectionHeader
+import com.rvalero.ecogrow.ui.util.LocalSnackbarHostState
+import com.rvalero.ecogrow.ui.util.UiEvent
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -45,12 +54,23 @@ fun HomeScreenViewModel(
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = LocalSnackbarHostState.current
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(Unit) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.uiEvent.collect { event ->
+                when (event) {
+                    is UiEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.message)
+                    is UiEvent.NavigateTo -> {}
+                    is UiEvent.NavigateBack -> {}
+                }
+            }
+        }
+    }
 
     HomeScreen(
         state = uiState,
-        snackbarHostState = snackbarHostState,
         onIntent = viewModel::handleIntent,
         modifier = modifier
     )
@@ -59,7 +79,6 @@ fun HomeScreenViewModel(
 @Composable
 fun HomeScreen(
     state: HomeState,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onIntent: (HomeIntent) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -68,7 +87,7 @@ fun HomeScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        GreetingHeader(userName = "Ramón")
+        GreetingHeader(userName = state.userName)
 
         EcoGrowSearchBar(
             value = "",
@@ -90,7 +109,19 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 12.dp)
         )
-        ProducerCardsRow()
+
+        if (state.isLoading && state.producers.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            ProducerCardsRow(producers = state.producers)
+        }
 
         EcoGrowSectionHeader(
             title = stringResource(R.string.home_featured_products),
@@ -99,7 +130,19 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 12.dp)
         )
-        ProductCardsGrid()
+
+        if (state.isLoading && state.products.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            ProductCardsRow(products = state.products)
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
     }
@@ -210,7 +253,7 @@ private fun SeasonBanner() {
 }
 
 @Composable
-private fun ProducerCardsRow() {
+private fun ProducerCardsRow(producers: List<Producer>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -219,35 +262,34 @@ private fun ProducerCardsRow() {
             .padding(bottom = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        EcoGrowProducerCard(name = "Finca La Encina", location = "2.3 km · Úbeda", rating = "4.8")
-        EcoGrowProducerCard(name = "Miel del Sur", location = "5.1 km · Baeza", rating = "4.6")
-        EcoGrowProducerCard(name = "Taller Rústico", location = "8.7 km · Jaén", rating = "4.9")
+        producers.forEach { producer ->
+            EcoGrowProducerCard(
+                name = producer.nombreNegocio,
+                location = String.format("%.1f km · %s", producer.distanciaKm, producer.localidad),
+                rating = ""
+            )
+        }
     }
 }
 
 @Composable
-private fun ProductCardsGrid() {
+private fun ProductCardsRow(products: List<Product>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
             .padding(horizontal = 20.dp)
             .padding(bottom = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        EcoGrowProductCard(
-            name = "Tomates cherry",
-            producerName = "Finca La Encina",
-            price = "2,50 €/kg",
-            badge = "Bio",
-            modifier = Modifier.weight(1f)
-        )
-        EcoGrowProductCard(
-            name = "Miel de azahar",
-            producerName = "Miel del Sur",
-            price = "8,00 €/500g",
-            badge = "Artesanal",
-            modifier = Modifier.weight(1f)
-        )
+        products.forEach { product ->
+            EcoGrowProductCard(
+                name = product.nombre,
+                producerName = product.productor,
+                price = String.format("%.2f €/%s", product.precio, product.unidad),
+                badge = null
+            )
+        }
     }
 }
 
@@ -256,7 +298,18 @@ private fun ProductCardsGrid() {
 private fun HomeScreenPreview() {
     EcoGrowTheme {
         HomeScreen(
-            state = HomeState(),
+            state = HomeState(
+                userName = "Ramón",
+                producers = listOf(
+                    Producer(1, "Finca La Encina", "Úbeda", true, 2.3),
+                    Producer(2, "Miel del Sur", "Baeza", true, 5.1),
+                    Producer(3, "Taller Rústico", "Jaén", false, 8.7)
+                ),
+                products = listOf(
+                    Product(1, "Tomates cherry", "Finca La Encina", 2.50, "kg"),
+                    Product(2, "Miel de azahar", "Miel del Sur", 8.00, "500g")
+                )
+            ),
             onIntent = {}
         )
     }

@@ -5,6 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -12,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.rvalero.ecogrow.ui.util.LocalSnackbarHostState
 import com.rvalero.ecogrow.ui.components.EcoGrowBottomBar
 import com.rvalero.ecogrow.ui.components.EcoGrowTopBar
 import com.rvalero.ecogrow.ui.main.tabs.ExploreTabContent
@@ -41,12 +43,14 @@ fun MainScreen() {
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
-        when (selectedTab) {
-            BottomTab.HOME -> HomeTabContent(Modifier.padding(paddingValues))
-            BottomTab.EXPLORE -> ExploreTabContent(Modifier.padding(paddingValues))
-            BottomTab.SHARE -> ShareTabContent(Modifier.padding(paddingValues))
-            BottomTab.ORDERS -> OrdersTabContent(Modifier.padding(paddingValues))
-            BottomTab.PROFILE -> ProfileTabContent(Modifier.padding(paddingValues))
+        CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
+            when (selectedTab) {
+                BottomTab.HOME -> HomeTabContent(Modifier.padding(paddingValues))
+                BottomTab.EXPLORE -> ExploreTabContent(Modifier.padding(paddingValues))
+                BottomTab.SHARE -> ShareTabContent(Modifier.padding(paddingValues))
+                BottomTab.ORDERS -> OrdersTabContent(Modifier.padding(paddingValues))
+                BottomTab.PROFILE -> ProfileTabContent(Modifier.padding(paddingValues))
+            }
         }
     }
 }

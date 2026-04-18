@@ -1,6 +1,5 @@
 package com.rvalero.ecogrow.data.remote.utils
 
-import com.rvalero.ecogrow.BuildConfig
 import com.rvalero.ecogrow.common.CrashlyticsLogger
 import com.rvalero.ecogrow.data.model.ApiResponseDto
 import com.rvalero.ecogrow.data.model.auth.AuthResponseDto
@@ -14,7 +13,9 @@ import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import android.util.Log
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -37,7 +38,12 @@ fun provideHttpClient(tokenManager: TokenManager): HttpClient {
         }
 
         install(Logging) {
-            level = if (BuildConfig.DEBUG) LogLevel.BODY else LogLevel.NONE
+            logger = object : Logger {
+                override fun log(message: String) {
+                    Log.d("KtorClient", message)
+                }
+            }
+            level = LogLevel.ALL
         }
 
         install(Auth) {

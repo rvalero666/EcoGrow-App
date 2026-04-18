@@ -1,4 +1,4 @@
-package com.rvalero.ecogrow.domain.useCase
+package com.rvalero.ecogrow.domain.useCase.auth
 
 import com.rvalero.ecogrow.common.NetworkResult
 import com.rvalero.ecogrow.domain.model.Usuario

@@ -1,4 +1,4 @@
-package com.rvalero.ecogrow.data.remote.apiService
+package com.rvalero.ecogrow.data.remote.apiService.auth
 
 import com.rvalero.ecogrow.data.model.ApiResponseDto
 import com.rvalero.ecogrow.data.model.auth.AuthResponseDto

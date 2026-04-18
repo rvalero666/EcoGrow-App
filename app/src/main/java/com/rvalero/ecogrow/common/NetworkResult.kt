@@ -1,6 +1,5 @@
 package com.rvalero.ecogrow.common
 
-import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.statement.HttpResponse

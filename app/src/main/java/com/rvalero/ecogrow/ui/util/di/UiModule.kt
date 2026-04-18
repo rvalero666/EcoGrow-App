@@ -11,5 +11,5 @@ val uiModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { RegisterViewModel(get()) }
     viewModel { ActivationViewModel() }
-    viewModel { HomeViewModel() }
+    viewModel { HomeViewModel(get(), get()) }
 }
