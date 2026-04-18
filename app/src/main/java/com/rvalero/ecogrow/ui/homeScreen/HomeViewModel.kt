@@ -5,7 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.rvalero.ecogrow.common.NetworkResult
 import com.rvalero.ecogrow.domain.useCase.auth.GetUserNameUseCase
 import com.rvalero.ecogrow.domain.useCase.product.GetFeaturedProductsUseCase
+import com.rvalero.ecogrow.domain.useCase.product.SearchProductsUseCase
 import com.rvalero.ecogrow.domain.useCase.producer.GetNearbyProducersUseCase
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import com.rvalero.ecogrow.ui.util.UiEvent
 import kotlinx.coroutines.channels.Channel
@@ -20,7 +23,8 @@ import java.math.BigDecimal
 class HomeViewModel(
     private val getNearbyProducersUseCase: GetNearbyProducersUseCase,
     private val getFeaturedProductsUseCase: GetFeaturedProductsUseCase,
-    private val getUserNameUseCase: GetUserNameUseCase
+    private val getUserNameUseCase: GetUserNameUseCase,
+    private val searchProductsUseCase: SearchProductsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeState())
@@ -28,6 +32,8 @@ class HomeViewModel(
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
+    private var searchJob: Job? = null
 
     init {
         loadData()
@@ -40,7 +46,35 @@ class HomeViewModel(
     fun handleIntent(intent: HomeIntent) {
         when (intent) {
             is HomeIntent.LoadData -> loadData()
+            is HomeIntent.SearchQueryChanged -> onSearchQueryChanged(intent.query)
+            is HomeIntent.ClearSearch -> clearSearch()
         }
+    }
+
+    private fun onSearchQueryChanged(query: String) {
+        _uiState.update { it.copy(searchQuery = query) }
+        searchJob?.cancel()
+
+        if (query.isBlank()) {
+            _uiState.update { it.copy(searchResults = emptyList(), isSearching = false) }
+            return
+        }
+
+        searchJob = viewModelScope.launch {
+            delay(300)
+            _uiState.update { it.copy(isSearching = true) }
+            val result = searchProductsUseCase(query, limit = 20)
+            _uiState.update { it.copy(isSearching = false) }
+            when (result) {
+                is NetworkResult.Success -> _uiState.update { it.copy(searchResults = result.data) }
+                is NetworkResult.Error -> sendEvent(UiEvent.ShowSnackbar(result.message ?: "Error al buscar productos"))
+            }
+        }
+    }
+
+    private fun clearSearch() {
+        searchJob?.cancel()
+        _uiState.update { it.copy(searchQuery = "", searchResults = emptyList(), isSearching = false) }
     }
 
     private fun loadData() {

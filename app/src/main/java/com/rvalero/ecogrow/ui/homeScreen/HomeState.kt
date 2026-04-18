@@ -8,5 +8,8 @@ data class HomeState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val producers: List<Producer> = emptyList(),
-    val products: List<Product> = emptyList()
+    val products: List<Product> = emptyList(),
+    val searchQuery: String = "",
+    val searchResults: List<Product> = emptyList(),
+    val isSearching: Boolean = false
 )

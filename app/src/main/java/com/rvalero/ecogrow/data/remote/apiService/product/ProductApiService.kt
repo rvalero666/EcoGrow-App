@@ -6,4 +6,6 @@ import com.rvalero.ecogrow.data.model.product.ProductFeaturedResponseDto
 interface ProductApiService {
 
     suspend fun getProductFeatured(): ApiResponseDto<List<ProductFeaturedResponseDto>>
+
+    suspend fun searchProducts(query: String, limit: Int?): ApiResponseDto<List<ProductFeaturedResponseDto>>
 }

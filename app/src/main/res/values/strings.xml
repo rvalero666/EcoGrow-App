@@ -49,6 +49,7 @@
     <string name="home_nearby_producers">Productores cercanos</string>
     <string name="home_featured_products">Productos destacados</string>
     <string name="home_see_all">Ver todos</string>
+    <string name="home_no_search_results">No se encontraron productos</string>
     <string name="category_all">Todos</string>
     <string name="category_vegetables">Verduras</string>
     <string name="category_fruits">Frutas</string>

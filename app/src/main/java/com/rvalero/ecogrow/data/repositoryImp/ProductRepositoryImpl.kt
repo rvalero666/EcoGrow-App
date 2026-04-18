@@ -25,4 +25,20 @@ class ProductRepositoryImpl(
             }
         }
     }
+
+    override suspend fun searchProducts(query: String, limit: Int?): NetworkResult<List<Product>> {
+        return safeApiCall {
+            val response = apiService.searchProducts(query, limit)
+            if (!response.success || response.data == null) throw Exception(response.message)
+            response.data.map { dto ->
+                Product(
+                    id = dto.id,
+                    nombre = dto.nombre,
+                    productor = dto.nombreNegocio,
+                    precio = dto.precio,
+                    unidad = dto.unidad
+                )
+            }
+        }
+    }
 }

@@ -88,64 +88,122 @@ fun HomeScreen(
         GreetingHeader(userName = state.userName)
 
         EcoGrowSearchBar(
-            value = "",
-            onValueChange = { },
+            value = state.searchQuery,
+            onValueChange = { onIntent(HomeIntent.SearchQueryChanged(it)) },
             hint = stringResource(R.string.home_search_hint),
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 16.dp)
         )
 
-        CategoryChips()
-
-        SeasonBanner()
-
-        EcoGrowSectionHeader(
-            title = stringResource(R.string.home_nearby_producers),
-            actionText = stringResource(R.string.home_see_all),
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 12.dp)
-        )
-
-        if (state.isLoading && state.producers.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+        if (state.searchQuery.isNotBlank()) {
+            SearchResultsContent(
+                searchResults = state.searchResults,
+                isSearching = state.isSearching
+            )
         } else {
-            ProducerCardsRow(producers = state.producers)
-        }
-
-        EcoGrowSectionHeader(
-            title = stringResource(R.string.home_featured_products),
-            actionText = stringResource(R.string.home_see_all),
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 12.dp)
-        )
-
-        if (state.isLoading && state.products.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        } else {
-            ProductCardsRow(products = state.products)
+            HomeDefaultContent(state = state)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
+
+@Composable
+private fun HomeDefaultContent(state: HomeState) {
+    CategoryChips()
+
+    SeasonBanner()
+
+    EcoGrowSectionHeader(
+        title = stringResource(R.string.home_nearby_producers),
+        actionText = stringResource(R.string.home_see_all),
+        modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 12.dp)
+    )
+
+    if (state.isLoading && state.producers.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 24.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    } else {
+        ProducerCardsRow(producers = state.producers)
+    }
+
+    EcoGrowSectionHeader(
+        title = stringResource(R.string.home_featured_products),
+        actionText = stringResource(R.string.home_see_all),
+        modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 12.dp)
+    )
+
+    if (state.isLoading && state.products.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 24.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    } else {
+        ProductCardsRow(products = state.products)
+    }
+}
+
+@Composable
+private fun SearchResultsContent(
+    searchResults: List<Product>,
+    isSearching: Boolean
+) {
+    if (isSearching) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 32.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    } else if (searchResults.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 32.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = stringResource(R.string.home_no_search_results),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    } else {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            searchResults.forEach { product ->
+                EcoGrowProductCard(
+                    name = product.nombre,
+                    producerName = product.productor,
+                    price = String.format("%.2f €/%s", product.precio, product.unidad),
+                    badge = null,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+    }
+}
 
 @Composable
 private fun GreetingHeader(userName: String) {
