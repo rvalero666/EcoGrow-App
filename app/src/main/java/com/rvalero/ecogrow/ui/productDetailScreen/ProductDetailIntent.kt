@@ -5,4 +5,5 @@ sealed interface ProductDetailIntent {
     data object DecrementQuantity : ProductDetailIntent
     data object AddToCart : ProductDetailIntent
     data object NavigateBack : ProductDetailIntent
+    data class SelectImage(val index: Int) : ProductDetailIntent
 }

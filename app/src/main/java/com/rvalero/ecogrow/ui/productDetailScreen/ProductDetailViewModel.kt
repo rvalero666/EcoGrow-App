@@ -38,6 +38,9 @@ class ProductDetailViewModel(
             is ProductDetailIntent.DecrementQuantity -> decrementQuantity()
             is ProductDetailIntent.AddToCart -> addToCart()
             is ProductDetailIntent.NavigateBack -> sendEvent(UiEvent.NavigateBack)
+            is ProductDetailIntent.SelectImage -> _uiState.update {
+                it.copy(selectedImageIndex = intent.index)
+            }
         }
     }
 

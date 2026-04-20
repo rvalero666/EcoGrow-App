@@ -6,5 +6,6 @@ data class ProductDetailState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val product: ProductDetail? = null,
-    val quantity: Int = 1
+    val quantity: Int = 1,
+    val selectedImageIndex: Int = 0
 )

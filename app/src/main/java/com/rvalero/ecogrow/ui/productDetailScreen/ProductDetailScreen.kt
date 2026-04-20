@@ -2,37 +2,28 @@ package com.rvalero.ecogrow.ui.productDetailScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Eco
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -45,19 +36,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import coil3.compose.AsyncImage
 import com.example.compose.EcoGrowTheme
 import com.rvalero.ecogrow.R
 import com.rvalero.ecogrow.domain.model.ProductDetail
+import com.rvalero.ecogrow.ui.components.EcoGrowBadge
+import com.rvalero.ecogrow.ui.components.EcoGrowDetailTopBar
+import com.rvalero.ecogrow.ui.components.EcoGrowMetaStrip
+import com.rvalero.ecogrow.ui.components.EcoGrowQuantitySelector
+import com.rvalero.ecogrow.ui.components.MetaStripItem
 import com.rvalero.ecogrow.ui.util.UiEvent
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -129,6 +128,9 @@ fun ProductDetailScreen(
                 .padding(bottom = 90.dp)
         ) {
             HeroSection(
+                imagenes = product.imagenes,
+                selectedImageIndex = state.selectedImageIndex,
+                onImageSelected = { onIntent(ProductDetailIntent.SelectImage(it)) },
                 onBack = { onIntent(ProductDetailIntent.NavigateBack) },
                 precio = product.precio,
                 unidad = product.unidad
@@ -143,7 +145,17 @@ fun ProductDetailScreen(
 
             DescriptionSection(description = product.descripcion)
 
-            MetaStrip(product = product)
+            val metaItems = buildList {
+                if (product.productorLocalidad.isNotBlank()) add(MetaStripItem(stringResource(R.string.product_detail_meta_origin), product.productorLocalidad))
+                add(MetaStripItem(stringResource(R.string.product_detail_meta_unit), product.unidad))
+                if (product.categoria.isNotBlank()) add(MetaStripItem(stringResource(R.string.product_detail_meta_category), product.categoria))
+            }
+            EcoGrowMetaStrip(
+                items = metaItems,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 16.dp)
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -161,6 +173,9 @@ fun ProductDetailScreen(
 
 @Composable
 private fun HeroSection(
+    imagenes: List<String>,
+    selectedImageIndex: Int,
+    onImageSelected: (Int) -> Unit,
     onBack: () -> Unit,
     precio: Double,
     unidad: String
@@ -171,95 +186,61 @@ private fun HeroSection(
             .height(420.dp)
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
-        Icon(
-            imageVector = Icons.Outlined.Eco,
-            contentDescription = null,
-            modifier = Modifier
-                .size(160.dp)
-                .align(Alignment.Center),
-            tint = MaterialTheme.colorScheme.primary
-        )
-
-        // Top chrome: back, share, heart
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 44.dp, start = 12.dp, end = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onBack,
+        val currentUrl = imagenes.getOrNull(selectedImageIndex)
+        if (currentUrl != null) {
+            AsyncImage(
+                model = currentUrl,
+                contentDescription = null,
                 modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.85f))
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = stringResource(R.string.product_detail_back),
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            }
-
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                IconButton(
-                    onClick = { },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.85f))
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Share,
-                        contentDescription = stringResource(R.string.product_detail_share),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                IconButton(
-                    onClick = { },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Favorite,
-                        contentDescription = stringResource(R.string.product_detail_favorite),
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            }
+                    .fillMaxSize()
+                    .align(Alignment.Center),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Outlined.Eco,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(160.dp)
+                    .align(Alignment.Center),
+                tint = MaterialTheme.colorScheme.primary
+            )
         }
 
-        // Floating thumbnails
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 60.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            repeat(3) { index ->
-                Box(
-                    modifier = Modifier
-                        .size(54.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.85f))
-                        .then(
-                            if (index == 0) Modifier.border(
-                                2.dp,
-                                MaterialTheme.colorScheme.primary,
-                                RoundedCornerShape(10.dp)
-                            ) else Modifier
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Eco,
-                        contentDescription = null,
-                        modifier = Modifier.size(28.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
+        EcoGrowDetailTopBar(onBack = onBack)
+
+
+        if (imagenes.size > 1) {
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 16.dp, bottom = 60.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                imagenes.forEachIndexed { index, url ->
+                    Box(
+                        modifier = Modifier
+                            .size(54.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable { onImageSelected(index) }
+                            .then(
+                                if (index == selectedImageIndex) Modifier.border(
+                                    2.dp,
+                                    MaterialTheme.colorScheme.primary,
+                                    RoundedCornerShape(10.dp)
+                                ) else Modifier
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        AsyncImage(
+                            model = url,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(10.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                 }
             }
         }
@@ -304,18 +285,17 @@ private fun HeroSection(
 @Composable
 private fun TitleBlock(product: ProductDetail) {
     Column(modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 44.dp)) {
-        // Badges
         Row(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier.padding(bottom = 10.dp)
         ) {
             if (product.categoria.isNotBlank()) {
-                Badge(text = product.categoria)
+                EcoGrowBadge(text = product.categoria)
             }
             if (product.productorVerificado) {
-                Badge(text = stringResource(R.string.product_detail_verified))
+                EcoGrowBadge(text = stringResource(R.string.product_detail_verified))
             }
-            Badge(text = stringResource(R.string.product_detail_season))
+            EcoGrowBadge(text = stringResource(R.string.product_detail_season))
         }
 
         Text(
@@ -356,24 +336,6 @@ private fun TitleBlock(product: ProductDetail) {
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun Badge(text: String) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(horizontal = 9.dp, vertical = 3.dp)
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 11.sp
-        )
     }
 }
 
@@ -436,16 +398,20 @@ private fun ProducerRow(producerName: String, producerLocation: String) {
 private fun DescriptionSection(description: String) {
     if (description.isBlank()) return
 
+    val primaryColor = MaterialTheme.colorScheme.primary
     Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp)) {
-        // Pull-quote style
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(
-                    width = 3.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(topStart = 0.dp, bottomStart = 0.dp)
-                )
+                .drawBehind {
+                    val strokeWidth = 3.dp.toPx()
+                    drawLine(
+                        color = primaryColor,
+                        start = Offset(0f, 0f),
+                        end = Offset(0f, size.height),
+                        strokeWidth = strokeWidth
+                    )
+                }
                 .padding(start = 14.dp, top = 2.dp, bottom = 2.dp)
         ) {
             Text(
@@ -470,63 +436,6 @@ private fun DescriptionSection(description: String) {
 }
 
 @Composable
-private fun MetaStrip(product: ProductDetail) {
-    val items = buildList {
-        if (product.productorLocalidad.isNotBlank()) add(stringResource(R.string.product_detail_meta_origin) to product.productorLocalidad)
-        add(stringResource(R.string.product_detail_meta_unit) to product.unidad)
-        if (product.categoria.isNotBlank()) add(stringResource(R.string.product_detail_meta_category) to product.categoria)
-    }
-
-    if (items.isEmpty()) return
-
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
-            .padding(top = 16.dp)
-    ) {
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(vertical = 14.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            items.forEachIndexed { index, (label, value) ->
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = label.uppercase(),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.outline,
-                        letterSpacing = 0.6.sp,
-                        fontSize = 10.sp
-                    )
-                    Text(
-                        text = value,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(top = 2.dp)
-                    )
-                }
-                if (index < items.lastIndex) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(1.dp)
-                            .background(MaterialTheme.colorScheme.outlineVariant)
-                    )
-                }
-            }
-        }
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-    }
-}
-
-@Composable
 private fun BottomActionBar(
     quantity: Int,
     price: Double,
@@ -546,44 +455,12 @@ private fun BottomActionBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            // Quantity selector
-            Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(26.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .height(48.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(
-                    onClick = onDecrement,
-                    modifier = Modifier.size(44.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Remove,
-                        contentDescription = stringResource(R.string.product_detail_decrease),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                Text(
-                    text = "$quantity",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.width(24.dp),
-                    textAlign = TextAlign.Center
-                )
-                IconButton(
-                    onClick = onIncrement,
-                    modifier = Modifier.size(44.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(R.string.product_detail_increase),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
+            EcoGrowQuantitySelector(
+                quantity = quantity,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement
+            )
 
-            // Add to cart button
             val total = price * quantity
             Button(
                 onClick = onAddToCart,

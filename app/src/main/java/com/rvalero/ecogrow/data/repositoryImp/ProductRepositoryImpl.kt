@@ -61,7 +61,7 @@ class ProductRepositoryImpl(
                 productorLocalidad = dto.productor.localidad ?: "",
                 productorVerificado = dto.productor.verificado,
                 categoria = dto.categoria ?: "",
-                imagenes = dto.imagenes
+                imagenes = dto.imagenes.map { it.url }
             )
         }
     }

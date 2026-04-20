@@ -56,10 +56,14 @@
     <string name="category_crafts">Artesanía</string>
     <string name="category_honey">Miel</string>
 
+    <!-- Componentes compartidos -->
+    <string name="action_back">Volver</string>
+    <string name="action_share">Compartir</string>
+    <string name="action_favorite">Favorito</string>
+    <string name="action_decrease_quantity">Disminuir cantidad</string>
+    <string name="action_increase_quantity">Aumentar cantidad</string>
+
     <!-- Product Detail -->
-    <string name="product_detail_back">Volver</string>
-    <string name="product_detail_share">Compartir</string>
-    <string name="product_detail_favorite">Favorito</string>
     <string name="product_detail_price_label">PRECIO</string>
     <string name="product_detail_season">Temporada</string>
     <string name="product_detail_available">disponibles</string>
@@ -68,8 +72,6 @@
     <string name="product_detail_meta_unit">Unidad</string>
     <string name="product_detail_meta_category">Categoría</string>
     <string name="product_detail_verified">Verificado</string>
-    <string name="product_detail_decrease">Disminuir cantidad</string>
-    <string name="product_detail_increase">Aumentar cantidad</string>
     <string name="product_detail_add_to_cart">Añadir</string>
 
     <!-- Bottom navigation tabs -->

@@ -13,7 +13,12 @@ data class ProductDetailResponseDto(
     val disponible: Boolean = true,
     val productor: ProductDetailProducerDto,
     val categoria: String? = null,
-    val imagenes: List<String> = emptyList()
+    val imagenes: List<ImagenDto> = emptyList()
+)
+
+@Serializable
+data class ImagenDto(
+    val url: String
 )
 
 @Serializable
