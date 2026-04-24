@@ -5,5 +5,6 @@ data class Producer(
     val nombreNegocio: String,
     val localidad: String,
     val verificado: Boolean,
-    val distanciaKm: Double
+    val distanciaKm: Double,
+    val imagenUrl: String? = null
 )

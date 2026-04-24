@@ -8,5 +8,6 @@ data class ProductFeaturedResponseDto(
     val nombre: String,
     val precio: Double,
     val unidad: String,
-    val nombreNegocio: String
+    val nombreNegocio: String,
+    val imagenUrl: String? = null
 )

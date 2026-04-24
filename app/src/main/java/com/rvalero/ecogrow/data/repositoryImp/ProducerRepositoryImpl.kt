@@ -26,7 +26,8 @@ class ProducerRepositoryImpl(
                     nombreNegocio = dto.nombreNegocio,
                     localidad = dto.localidad,
                     verificado = dto.verificado,
-                    distanciaKm = dto.distanciaKm
+                    distanciaKm = dto.distanciaKm,
+                    imagenUrl = dto.imagenUrl
                 )
             }
         }

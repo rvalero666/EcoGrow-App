@@ -21,7 +21,8 @@ class ProductRepositoryImpl(
                     nombre = dto.nombre,
                     productor = dto.nombreNegocio,
                     precio = dto.precio,
-                    unidad = dto.unidad
+                    unidad = dto.unidad,
+                    imagenUrl = dto.imagenUrl
                 )
             }
         }
@@ -37,7 +38,8 @@ class ProductRepositoryImpl(
                     nombre = dto.nombre,
                     productor = dto.nombreNegocio,
                     precio = dto.precio,
-                    unidad = dto.unidad
+                    unidad = dto.unidad,
+                    imagenUrl = dto.imagenUrl
                 )
             }
         }

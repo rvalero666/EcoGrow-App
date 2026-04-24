@@ -40,6 +40,7 @@ import com.rvalero.ecogrow.domain.model.Producer
 import com.rvalero.ecogrow.domain.model.Product
 import com.rvalero.ecogrow.ui.components.EcoGrowProducerCard
 import com.rvalero.ecogrow.ui.components.EcoGrowProductCard
+import com.rvalero.ecogrow.ui.components.EcoGrowProductCardWide
 import com.rvalero.ecogrow.ui.components.EcoGrowSearchBar
 import com.rvalero.ecogrow.ui.components.EcoGrowSectionHeader
 import com.rvalero.ecogrow.ui.util.LocalSnackbarHostState
@@ -193,18 +194,16 @@ private fun SearchResultsContent(
         }
     } else {
         Column(
-            modifier = Modifier
-                .padding(horizontal = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            modifier = Modifier.padding(horizontal = 20.dp)
         ) {
             searchResults.forEach { product ->
-                EcoGrowProductCard(
+                EcoGrowProductCardWide(
                     name = product.nombre,
                     producerName = product.productor,
                     price = String.format("%.2f €/%s", product.precio, product.unidad),
+                    imageUrl = product.imagenUrl,
                     badge = null,
-                    onClick = { onProductClick(product.id) },
-                    modifier = Modifier.fillMaxWidth()
+                    onClick = { onProductClick(product.id) }
                 )
             }
         }
@@ -328,7 +327,8 @@ private fun ProducerCardsRow(producers: List<Producer>) {
             EcoGrowProducerCard(
                 name = producer.nombreNegocio,
                 location = String.format("%.1f km · %s", producer.distanciaKm, producer.localidad),
-                rating = ""
+                rating = "",
+                imageUrl = producer.imagenUrl
             )
         }
     }
@@ -349,6 +349,7 @@ private fun ProductCardsRow(products: List<Product>, onProductClick: (Long) -> U
                 name = product.nombre,
                 producerName = product.productor,
                 price = String.format("%.2f €/%s", product.precio, product.unidad),
+                imageUrl = product.imagenUrl,
                 badge = null,
                 onClick = { onProductClick(product.id) }
             )
