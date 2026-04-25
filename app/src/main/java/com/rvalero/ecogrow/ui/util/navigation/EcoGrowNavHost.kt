@@ -8,6 +8,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.rvalero.ecogrow.ui.activationScreen.ActivationViewModelScreen
+import com.rvalero.ecogrow.ui.becomeProducerScreen.BecomeProducerViewModelScreen
 import com.rvalero.ecogrow.ui.loginScreen.LoginViewModelScreen
 import com.rvalero.ecogrow.ui.main.MainScreen
 import com.rvalero.ecogrow.ui.productDetailScreen.ProductDetailViewModelScreen
@@ -63,6 +64,9 @@ fun EcoGrowNavHost() {
                 MainScreen(
                     onNavigateToProductDetail = { productId ->
                         navigateTo(Routes.ProductDetailRoute(productId))
+                    },
+                    onNavigateToBecomeProducer = {
+                        navigateTo(Routes.BecomeProducerRoute)
                     }
                 )
             }
@@ -70,6 +74,12 @@ fun EcoGrowNavHost() {
             entry<Routes.ProductDetailRoute> { route ->
                 ProductDetailViewModelScreen(
                     productId = route.productId,
+                    onNavigateBack = dropUnlessResumed { pop() }
+                )
+            }
+
+            entry<Routes.BecomeProducerRoute> {
+                BecomeProducerViewModelScreen(
                     onNavigateBack = dropUnlessResumed { pop() }
                 )
             }

@@ -12,4 +12,11 @@ interface ProducerRepository {
         radioKm: Int?,
         limit: Int?
     ): NetworkResult<List<Producer>>
+
+    suspend fun becomeProducer(
+        nombreNegocio: String,
+        descripcion: String?,
+        localidad: String,
+        provincia: String
+    ): NetworkResult<Producer>
 }

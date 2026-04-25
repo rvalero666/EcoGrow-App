@@ -71,7 +71,12 @@ fun provideHttpClient(tokenManager: TokenManager): HttpClient {
                             tokenManager.clearTokens()
                             return@refreshTokens null
                         }
-                        tokenManager.saveTokens(response.data.accessToken, response.data.refreshToken, response.data.nombre)
+                        tokenManager.saveTokens(
+                            accessToken = response.data.accessToken,
+                            refreshToken = response.data.refreshToken,
+                            nombre = response.data.nombre,
+                            rol = response.data.rol
+                        )
                         BearerTokens(response.data.accessToken, response.data.refreshToken)
                     } catch (e: Exception) {
                         CrashlyticsLogger.logException(e)

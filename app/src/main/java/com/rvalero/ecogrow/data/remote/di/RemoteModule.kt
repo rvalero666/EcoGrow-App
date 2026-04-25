@@ -17,7 +17,9 @@ import com.rvalero.ecogrow.domain.repository.ProductRepository
 import com.rvalero.ecogrow.domain.useCase.product.GetFeaturedProductsUseCase
 import com.rvalero.ecogrow.domain.useCase.product.GetProductDetailUseCase
 import com.rvalero.ecogrow.domain.useCase.product.SearchProductsUseCase
+import com.rvalero.ecogrow.domain.useCase.producer.BecomeProducerUseCase
 import com.rvalero.ecogrow.domain.useCase.producer.GetNearbyProducersUseCase
+import com.rvalero.ecogrow.domain.useCase.auth.GetCurrentUserUseCase
 import com.rvalero.ecogrow.domain.useCase.auth.GetUserNameUseCase
 import com.rvalero.ecogrow.domain.useCase.auth.LoginUseCase
 import com.rvalero.ecogrow.domain.useCase.auth.RegisterUseCase
@@ -35,7 +37,7 @@ val remoteModule = module {
 
 val repositoryModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
-    single<ProducerRepository> { ProducerRepositoryImpl(get()) }
+    single<ProducerRepository> { ProducerRepositoryImpl(get(), get()) }
     single<ProductRepository> { ProductRepositoryImpl(get()) }
 }
 
@@ -44,7 +46,9 @@ val useCaseModule = module {
     single { RegisterUseCase(get()) }
     single { LoginUseCase(get()) }
     single { GetUserNameUseCase(get()) }
+    single { GetCurrentUserUseCase(get()) }
     single { GetNearbyProducersUseCase(get()) }
+    single { BecomeProducerUseCase(get()) }
     single { GetFeaturedProductsUseCase(get()) }
     single { SearchProductsUseCase(get()) }
     single { GetProductDetailUseCase(get()) }

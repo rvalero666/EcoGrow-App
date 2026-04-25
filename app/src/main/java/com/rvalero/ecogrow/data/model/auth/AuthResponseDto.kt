@@ -7,5 +7,6 @@ data class AuthResponseDto(
     val accessToken: String,
     val refreshToken: String,
     val expiresIn: Long,
-    val nombre: String
+    val nombre: String,
+    val rol: String
 )

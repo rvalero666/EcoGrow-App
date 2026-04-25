@@ -80,4 +80,31 @@
     <string name="tab_orders">Cesta</string>
     <string name="tab_profile">Perfil</string>
     <string name="tab_share">Publicar</string>
+
+    <!-- Profile -->
+    <string name="profile_badge_consumer">Consumidor</string>
+    <string name="profile_badge_producer">Productor</string>
+    <string name="profile_section_options">Opciones</string>
+    <string name="profile_option_orders">Mis pedidos</string>
+    <string name="profile_option_favorites">Favoritos</string>
+    <string name="profile_option_edit">Editar perfil</string>
+    <string name="profile_option_notifications">Notificaciones</string>
+    <string name="profile_option_settings">Ajustes</string>
+    <string name="profile_become_producer_title">Conviértete en productor</string>
+    <string name="profile_become_producer_subtitle">Abre tu tienda y empieza a vender a la comunidad local.</string>
+    <string name="profile_become_producer_cta">Activar modo productor</string>
+    <string name="profile_section_my_shop">Mi tienda</string>
+    <string name="profile_option_my_products">Mis productos</string>
+    <string name="profile_option_received_orders">Pedidos recibidos</string>
+    <string name="profile_option_edit_shop">Editar tienda</string>
+
+    <!-- Become producer -->
+    <string name="become_producer_title">Convertirse en productor</string>
+    <string name="become_producer_subtitle">Completa los datos de tu negocio para empezar a publicar productos.</string>
+    <string name="field_nombre_negocio">Nombre del negocio</string>
+    <string name="field_descripcion">Descripción (opcional)</string>
+    <string name="field_localidad">Localidad</string>
+    <string name="field_provincia">Provincia</string>
+    <string name="btn_activate_producer">Activar productor</string>
+    <string name="become_producer_success">¡Ya eres productor!</string>
 </resources>

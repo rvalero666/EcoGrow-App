@@ -13,10 +13,11 @@ import com.rvalero.ecogrow.ui.main.BottomTab
 @Composable
 fun EcoGrowBottomBar(
     selectedTab: BottomTab,
+    tabs: List<BottomTab>,
     onTabSelected: (BottomTab) -> Unit
 ) {
     NavigationBar {
-        BottomTab.entries.forEach { tab ->
+        tabs.forEach { tab ->
             val selected = tab == selectedTab
             NavigationBarItem(
                 selected = selected,
@@ -37,10 +38,23 @@ fun EcoGrowBottomBar(
 
 @Preview(showBackground = true)
 @Composable
-private fun EcoGrowBottomBarPreview() {
+private fun EcoGrowBottomBarConsumerPreview() {
     EcoGrowTheme {
         EcoGrowBottomBar(
             selectedTab = BottomTab.HOME,
+            tabs = BottomTab.entries.filter { it != BottomTab.SHARE },
+            onTabSelected = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun EcoGrowBottomBarProducerPreview() {
+    EcoGrowTheme {
+        EcoGrowBottomBar(
+            selectedTab = BottomTab.HOME,
+            tabs = BottomTab.entries.toList(),
             onTabSelected = {}
         )
     }
