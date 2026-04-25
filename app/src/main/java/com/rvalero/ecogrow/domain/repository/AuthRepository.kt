@@ -10,6 +10,7 @@ interface AuthRepository {
 
     suspend fun register(registerRequest: Usuario): NetworkResult<String>
     suspend fun login(email: String, password: String): NetworkResult<Unit>
+    suspend fun logout(): NetworkResult<Unit>
     fun getUserName(): Flow<String?>
     fun getUserRole(): Flow<UserRole>
     fun getCurrentUser(): Flow<CurrentUser>

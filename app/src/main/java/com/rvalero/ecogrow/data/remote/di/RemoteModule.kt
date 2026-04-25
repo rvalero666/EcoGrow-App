@@ -22,6 +22,7 @@ import com.rvalero.ecogrow.domain.useCase.producer.GetNearbyProducersUseCase
 import com.rvalero.ecogrow.domain.useCase.auth.GetCurrentUserUseCase
 import com.rvalero.ecogrow.domain.useCase.auth.GetUserNameUseCase
 import com.rvalero.ecogrow.domain.useCase.auth.LoginUseCase
+import com.rvalero.ecogrow.domain.useCase.auth.LogoutUseCase
 import com.rvalero.ecogrow.domain.useCase.auth.RegisterUseCase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -45,6 +46,7 @@ val repositoryModule = module {
 val useCaseModule = module {
     single { RegisterUseCase(get()) }
     single { LoginUseCase(get()) }
+    single { LogoutUseCase(get()) }
     single { GetUserNameUseCase(get()) }
     single { GetCurrentUserUseCase(get()) }
     single { GetNearbyProducersUseCase(get()) }

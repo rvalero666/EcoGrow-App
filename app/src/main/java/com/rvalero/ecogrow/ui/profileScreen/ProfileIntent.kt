@@ -9,4 +9,7 @@ sealed interface ProfileIntent {
     data object MyProductsClicked : ProfileIntent
     data object ReceivedOrdersClicked : ProfileIntent
     data object EditShopClicked : ProfileIntent
+    data object LogoutClicked : ProfileIntent
+    data object LogoutConfirmed : ProfileIntent
+    data object LogoutDismissed : ProfileIntent
 }

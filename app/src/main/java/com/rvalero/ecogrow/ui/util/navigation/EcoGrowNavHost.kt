@@ -67,6 +67,10 @@ fun EcoGrowNavHost() {
                     },
                     onNavigateToBecomeProducer = {
                         navigateTo(Routes.BecomeProducerRoute)
+                    },
+                    onNavigateToLogin = {
+                        backStack.removeAll { it !is Routes.LoginRoute }
+                        if (backStack.isEmpty()) navigateTo(Routes.LoginRoute)
                     }
                 )
             }

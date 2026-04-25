@@ -18,6 +18,6 @@ val uiModule = module {
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { (productId: Long) -> ProductDetailViewModel(productId, get()) }
     viewModel { MainViewModel(get()) }
-    viewModel { ProfileViewModel(get()) }
+    viewModel { ProfileViewModel(get(), get()) }
     viewModel { BecomeProducerViewModel(get()) }
 }

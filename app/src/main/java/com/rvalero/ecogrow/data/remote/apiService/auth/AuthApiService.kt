@@ -8,4 +8,5 @@ import com.rvalero.ecogrow.data.model.auth.RegisterRequestDto
 interface AuthApiService {
     suspend fun register(request: RegisterRequestDto): ApiResponseDto<Unit>
     suspend fun login(request: LoginRequestDto): ApiResponseDto<AuthResponseDto>
+    suspend fun logout(): ApiResponseDto<Unit>
 }

@@ -28,6 +28,7 @@ import org.koin.androidx.compose.koinViewModel
 fun MainScreen(
     onNavigateToProductDetail: (Long) -> Unit = {},
     onNavigateToBecomeProducer: () -> Unit = {},
+    onNavigateToLogin: () -> Unit = {},
     viewModel: MainViewModel = koinViewModel()
 ) {
     val userRole by viewModel.userRole.collectAsStateWithLifecycle()
@@ -70,6 +71,7 @@ fun MainScreen(
                 BottomTab.ORDERS -> OrdersTabContent(Modifier.padding(paddingValues))
                 BottomTab.PROFILE -> ProfileViewModelScreen(
                     onNavigateToBecomeProducer = onNavigateToBecomeProducer,
+                    onNavigateToLogin = onNavigateToLogin,
                     modifier = Modifier.padding(paddingValues)
                 )
             }

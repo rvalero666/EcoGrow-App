@@ -2,7 +2,9 @@ package com.rvalero.ecogrow.ui.profileScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rvalero.ecogrow.common.NetworkResult
 import com.rvalero.ecogrow.domain.useCase.auth.GetCurrentUserUseCase
+import com.rvalero.ecogrow.domain.useCase.auth.LogoutUseCase
 import com.rvalero.ecogrow.ui.util.UiEvent
 import com.rvalero.ecogrow.ui.util.navigation.Routes
 import kotlinx.coroutines.channels.Channel
@@ -14,7 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileState())
@@ -48,8 +51,27 @@ class ProfileViewModel(
         when (intent) {
             is ProfileIntent.BecomeProducerClicked ->
                 sendEvent(UiEvent.NavigateTo(Routes.BecomeProducerRoute))
+            is ProfileIntent.LogoutClicked ->
+                _uiState.update { it.copy(showLogoutDialog = true) }
+            is ProfileIntent.LogoutDismissed ->
+                _uiState.update { it.copy(showLogoutDialog = false) }
+            is ProfileIntent.LogoutConfirmed -> logout()
             else -> {
                 // Resto de opciones (pedidos, favoritos, editar perfil, etc.) sin implementar aún
+            }
+        }
+    }
+
+    private fun logout() {
+        _uiState.update { it.copy(showLogoutDialog = false, isLoading = true) }
+        viewModelScope.launch {
+            val result = logoutUseCase()
+            _uiState.update { it.copy(isLoading = false) }
+            when (result) {
+                is NetworkResult.Success ->
+                    sendEvent(UiEvent.NavigateTo(Routes.LoginRoute))
+                is NetworkResult.Error ->
+                    sendEvent(UiEvent.ShowSnackbar(result.message ?: "Error al cerrar sesión"))
             }
         }
     }

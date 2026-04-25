@@ -24,4 +24,8 @@ class AuthApiServiceImpl(
             setBody(request)
         }.body()
     }
+
+    override suspend fun logout(): ApiResponseDto<Unit> {
+        return client.post("/auth/logout").body()
+    }
 }

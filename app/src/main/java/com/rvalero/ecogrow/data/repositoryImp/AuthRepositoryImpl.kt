@@ -47,4 +47,11 @@ class AuthRepositoryImpl(
             )
         }
     }
+
+    override suspend fun logout(): NetworkResult<Unit> {
+        return safeApiCall {
+            runCatching { apiService.logout() }
+            tokenManager.clearTokens()
+        }
+    }
 }
