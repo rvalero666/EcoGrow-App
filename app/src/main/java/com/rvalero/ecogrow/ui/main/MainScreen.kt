@@ -19,8 +19,8 @@ import com.rvalero.ecogrow.ui.components.EcoGrowBottomBar
 import com.rvalero.ecogrow.ui.main.tabs.ExploreTabContent
 import com.rvalero.ecogrow.ui.main.tabs.HomeTabContent
 import com.rvalero.ecogrow.ui.main.tabs.OrdersTabContent
-import com.rvalero.ecogrow.ui.main.tabs.ShareTabContent
 import com.rvalero.ecogrow.ui.profileScreen.ProfileViewModelScreen
+import com.rvalero.ecogrow.ui.publishProductScreen.PublishProductViewModelScreen
 import com.rvalero.ecogrow.ui.util.LocalSnackbarHostState
 import org.koin.androidx.compose.koinViewModel
 
@@ -67,7 +67,7 @@ fun MainScreen(
                     modifier = Modifier.padding(paddingValues)
                 )
                 BottomTab.EXPLORE -> ExploreTabContent(Modifier.padding(paddingValues))
-                BottomTab.SHARE -> ShareTabContent(Modifier.padding(paddingValues))
+                BottomTab.SHARE -> PublishProductViewModelScreen(modifier = Modifier.padding(paddingValues))
                 BottomTab.ORDERS -> OrdersTabContent(Modifier.padding(paddingValues))
                 BottomTab.PROFILE -> ProfileViewModelScreen(
                     onNavigateToBecomeProducer = onNavigateToBecomeProducer,

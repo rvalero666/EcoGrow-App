@@ -26,9 +26,12 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.serialization.json.Json
 
 const val BASE_URL = "http://10.0.2.2:8080"
+private const val BACKEND_HOST = "10.0.2.2"
 
 fun provideHttpClient(tokenManager: TokenManager): HttpClient {
     return HttpClient(OkHttp) {
+        expectSuccess = true
+
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
@@ -86,7 +89,8 @@ fun provideHttpClient(tokenManager: TokenManager): HttpClient {
                 }
 
                 sendWithoutRequest { request ->
-                    !request.url.encodedPath.contains("/auth/")
+                    request.url.host == BACKEND_HOST &&
+                            !request.url.encodedPath.contains("/auth/")
                 }
             }
         }
@@ -94,6 +98,19 @@ fun provideHttpClient(tokenManager: TokenManager): HttpClient {
         defaultRequest {
             url(BASE_URL)
             contentType(ContentType.Application.Json)
+        }
+    }
+}
+
+fun provideImageHttpClient(): HttpClient {
+    return HttpClient(OkHttp) {
+        install(Logging) {
+            logger = object : Logger {
+                override fun log(message: String) {
+                    Log.d("CoilHttp", message)
+                }
+            }
+            level = LogLevel.INFO
         }
     }
 }

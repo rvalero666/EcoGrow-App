@@ -118,6 +118,23 @@
     <string name="dialog_logout_confirm">Cerrar sesión</string>
     <string name="dialog_logout_cancel">Cancelar</string>
 
+    <!-- Publish product -->
+    <string name="publish_product_title">Nuevo producto</string>
+    <string name="publish_product_action">Publicar</string>
+    <string name="publish_product_section_photos">Fotos del producto</string>
+    <string name="publish_product_photo_hint">La primera foto será la portada · máx. 6</string>
+    <string name="publish_product_photo_add">Añadir</string>
+    <string name="publish_product_photo_remove">Quitar foto</string>
+    <string name="publish_product_section_basic">Datos básicos</string>
+    <string name="publish_product_field_name">Nombre del producto</string>
+    <string name="publish_product_field_description">Descripción corta</string>
+    <string name="publish_product_field_category">Categoría</string>
+    <string name="publish_product_field_price">Precio (€)</string>
+    <string name="publish_product_field_unit">Unidad</string>
+    <string name="publish_product_field_stock">Stock disponible</string>
+    <string name="publish_product_toggle_available_title">Disponible para la venta</string>
+    <string name="publish_product_toggle_available_subtitle">Se mostrará en el catálogo público.</string>
+
     <!-- Become producer -->
     <string name="become_producer_title">Nuevo productor</string>
     <string name="become_producer_hero_title">Tu tienda en EcoGrow</string>

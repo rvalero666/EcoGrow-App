@@ -7,6 +7,7 @@ import com.rvalero.ecogrow.ui.loginScreen.LoginViewModel
 import com.rvalero.ecogrow.ui.main.MainViewModel
 import com.rvalero.ecogrow.ui.productDetailScreen.ProductDetailViewModel
 import com.rvalero.ecogrow.ui.profileScreen.ProfileViewModel
+import com.rvalero.ecogrow.ui.publishProductScreen.PublishProductViewModel
 import com.rvalero.ecogrow.ui.registerScreen.RegisterViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -20,4 +21,5 @@ val uiModule = module {
     viewModel { MainViewModel(get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { BecomeProducerViewModel(get()) }
+    viewModel { PublishProductViewModel(get()) }
 }

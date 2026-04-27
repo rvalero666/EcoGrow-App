@@ -26,6 +26,7 @@ kotlinxSerialization = "1.10.0"
 
 # kotlinx.coroutines
 kotlinxCoroutines = "1.10.2"
+kotlinxCoroutinesPlayServices = "1.10.2"
 
 # Koin (KMP)
 koin = "4.2.0"
@@ -87,6 +88,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 # kotlinx.coroutines
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
 
 # Koin (KMP)
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
@@ -106,6 +108,8 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
